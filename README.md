@@ -27,7 +27,7 @@ Game Title을 사고 팔수 있는 중고거래 서비스
 
 | 기능   | url        |
 |-------|------------|
-| 회원 가입 | /user/sign-up  |
+| 회원 가입 | /user/sign-up  |
 | 회원 탈퇴 | /user  |
 | 로그인   | /user/log-in   |
 | 로그아웃   | /user/log-out   |
@@ -36,12 +36,12 @@ Game Title을 사고 팔수 있는 중고거래 서비스
 
 | 기능   | url        |
 |-------|------------|
-| 상품 조회 | /product  |
-| 상품 등록 | /product  |
-| 상품 삭제 | /product  |
-| 상품 수정 | /product  |
-| 상품 예약 | /product  |
-| 좋아요   | /product  |
+| 상품 조회 | /product/find  |
+| 상품 등록 | /product/create  |
+| 상품 삭제 | /product/delete  |
+| 상품 수정 | /product/modify  |
+| 상품 예약 | /product/reserve  |
+| 좋아요   | /product/like  |
 
 ### 채팅
 
