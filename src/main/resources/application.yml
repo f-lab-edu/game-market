@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/database
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create  # 여기에 ddl 설정을 추가합니다.
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
