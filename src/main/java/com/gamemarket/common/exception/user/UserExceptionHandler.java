@@ -14,13 +14,14 @@ public class UserExceptionHandler {
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ExceptionResponse> userExceptionHandler(final UserException ex, final HttpServletRequest request) {
         final ExceptionResponse response = ExceptionResponse.builder()
-                .status(ex.getCode().getStatus())
                 .code(ex.getCode().getCode())
                 .message(ex.getCode().getMessage())
                 .build();
 
         log.info("[UserException] URI: {}, CODE: {}", request.getRequestURI(), response.getCode());
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity
+                .status(ex.getCode().getStatus())
+                .body(response);
     }
 
 }
