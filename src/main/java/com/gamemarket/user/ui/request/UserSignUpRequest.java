@@ -9,7 +9,7 @@ import lombok.Getter;
 public class UserSignUpRequest {
 
     private static final String EMAIL_REGEXP = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$";
-    private static final String NICKNAME_REGEXP = "(\"^[가-힣a-zA-Z]*$\")";
+    private static final String NICKNAME_REGEXP = "^[가-힣a-zA-Z]+$";
     private static final String PASSWORD_REGEXP = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{10,16}";
 
     @NotBlank(message = "이메일은 필수 입력 입니다.")
