@@ -1,7 +1,5 @@
 package com.gamemarket.user.application;
 
-import com.gamemarket.common.exception.user.UserException;
-import com.gamemarket.common.exception.user.UserExceptionCode;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.infra.UserRepository;
 import com.gamemarket.user.ui.request.UserSignUpRequest;
@@ -19,8 +17,6 @@ public class UserService {
 
     @Transactional
     public void signUp(final UserSignUpRequest request) {
-        validateDuplicateUser(request);
-
         final User user = User.builder()
                 .email(request.getEmail())
                 .nickname(request.getNickname())
@@ -30,14 +26,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void validateDuplicateUser(final UserSignUpRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserException(UserExceptionCode.EXISTS_USER_EMAIL);
-        }
+    @Transactional(readOnly = true)
+    public boolean validateDuplicateEmail(final String email) {
+        return userRepository.existsByEmail(email);
+    }
 
-        if (userRepository.existsByNickname(request.getNickname())) {
-            throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
-        }
+    @Transactional(readOnly = true)
+    public boolean validateDuplicateNickname(final String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 
 }

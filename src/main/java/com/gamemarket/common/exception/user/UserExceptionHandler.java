@@ -18,7 +18,7 @@ public class UserExceptionHandler {
                 .message(ex.getCode().getMessage())
                 .build();
 
-        log.info("[UserException] URI: {}, CODE: {}", request.getRequestURI(), response.getCode());
+        log.warn("[UserException] URI: {}, CODE: {}", request.getRequestURI(), response.getCode());
         return ResponseEntity
                 .status(ex.getCode().getStatus())
                 .body(response);
