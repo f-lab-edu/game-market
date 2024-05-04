@@ -1,7 +1,10 @@
 package com.gamemarket.user.infra;
 
+import com.gamemarket.common.exception.user.UserException;
+import com.gamemarket.common.exception.user.UserExceptionCode;
 import com.gamemarket.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -46,12 +49,22 @@ public class UserRepository {
         return !users.isEmpty();
     }
 
+    public User findByEmail(final String email) {
+        try {
+            return jdbcTemplate.queryForObject("select * from \"USER\" where email = ?", userRowMapper(), email);
+        } catch (EmptyResultDataAccessException e) {
+            throw new UserException(UserExceptionCode.INVALID_CREDENTIALS);
+        }
+
+    }
+
     private RowMapper<User> userRowMapper() {
         return (rs, rowNum) -> {
             User user = new User();
             user.setId(rs.getLong("id"));
             user.setEmail(rs.getString("email"));
             user.setNickname(rs.getString("nickname"));
+            user.setPassword(rs.getString("password"));
             user.setEmail(rs.getString("email"));
 
             return user;

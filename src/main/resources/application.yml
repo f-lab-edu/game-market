@@ -10,3 +10,7 @@ spring:
   h2:
     console:
       enabled: true
+server:
+  servlet:
+    session:
+      timeout: 30m
