@@ -26,14 +26,4 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public boolean validateDuplicateEmail(final String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean validateDuplicateNickname(final String nickname) {
-        return userRepository.existsByNickname(nickname);
-    }
-
 }

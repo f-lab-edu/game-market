@@ -1,8 +1,8 @@
 package com.gamemarket.user.ui;
 
 import com.gamemarket.common.exception.user.UserExceptionCode;
+import com.gamemarket.common.utils.JsonUtils;
 import com.google.gson.Gson;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -57,7 +57,7 @@ class UserControllerTest {
         existsEmailRequest.put("nickname", "abcdabcd");
         existsEmailRequest.put("password", "qwer1234QW!");
 
-        String existsEmailJson = new Gson().toJson(existsEmailRequest);
+        String existsEmailJson = JsonUtils.objectToJson(existsEmailRequest);
 
         mockMvc.perform(post("/user/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ class UserControllerTest {
         existsNicknameRequest.put("nickname", "abcd");
         existsNicknameRequest.put("password", "qwer1234QW!");
 
-        String existsNicknameJson = new Gson().toJson(existsNicknameRequest);
+        String existsNicknameJson = JsonUtils.objectToJson(existsNicknameRequest);
 
         mockMvc.perform(post("/user/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
