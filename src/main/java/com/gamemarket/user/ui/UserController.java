@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "sign-up")
+    @Operation(summary = "회원가입")
     public void signUp(@RequestBody @Valid final UserSignUpRequest request) {
        existsByEmail(request.getEmail());
        existsByNickname(request.getNickname());
@@ -42,7 +42,7 @@ public class UserController {
 
     @PatchMapping("/sign-off")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "sign-off")
+    @Operation(summary = "회원탈퇴")
     public void signOff(@RequestBody @Valid final UserSignOffRequest request, final HttpSession session) {
         final User user = SessionUtil.getUserFromSession(session);
         userService.signOff(user, request);
@@ -50,7 +50,7 @@ public class UserController {
 
     @PostMapping("/sign-in")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "sign-in")
+    @Operation(summary = "로그인")
     public void signIn(@RequestBody @Valid final UserSignInRequest request, final HttpSession session) {
         final User user = userService.signIn(request);
         session.setAttribute(SESSION_USER_KEY, user);
@@ -58,14 +58,14 @@ public class UserController {
 
     @PostMapping("/sign-out")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "sign-out")
+    @Operation(summary = "로그아웃")
     public void signOut(final HttpSession session) {
         session.invalidate();
     }
 
     @PatchMapping("/update")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "user profile update")
+    @Operation(summary = "회원정보변경")
     public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, final HttpSession session) {
         final User user = SessionUtil.getUserFromSession(session);
 
