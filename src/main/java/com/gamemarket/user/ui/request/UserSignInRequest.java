@@ -8,7 +8,6 @@ import lombok.ToString;
 @ToString
 public class UserSignInRequest {
 
-
     @NotBlank(message = "이메일은 필수 입력 입니다.")
     private String email;
 

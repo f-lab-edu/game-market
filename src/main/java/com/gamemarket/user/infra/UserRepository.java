@@ -2,6 +2,7 @@ package com.gamemarket.user.infra;
 
 import com.gamemarket.common.exception.user.UserException;
 import com.gamemarket.common.exception.user.UserExceptionCode;
+import com.gamemarket.user.domain.UserUpdateDto;
 import com.gamemarket.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,6 +40,11 @@ public class UserRepository {
         jdbcInsert.execute(new MapSqlParameterSource(parameters));
     }
 
+    public void signOff(final User user) {
+        jdbcTemplate.update("UPDATE \"USER\" SET status = false WHERE id = ?",
+                user.getId());
+    }
+
     public Boolean existsByNickname(final String nickname) {
         final List<User> users = jdbcTemplate.query("select * from \"USER\" where nickname = ?", userRowMapper(), nickname);
         return !users.isEmpty();
@@ -51,11 +57,15 @@ public class UserRepository {
 
     public User findByEmail(final String email) {
         try {
-            return jdbcTemplate.queryForObject("select * from \"USER\" where email = ?", userRowMapper(), email);
+            return jdbcTemplate.queryForObject("select * from \"USER\" where email = ? and status = true", userRowMapper(), email);
         } catch (EmptyResultDataAccessException e) {
             throw new UserException(UserExceptionCode.INVALID_CREDENTIALS);
         }
+    }
 
+    public void profileUpdate(final UserUpdateDto dto) {
+        jdbcTemplate.update("UPDATE \"USER\" SET nickname = COALESCE(?, nickname), password = COALESCE(?, password) WHERE id = ?",
+                dto.getNickname(), dto.getPassword(), dto.getId());
     }
 
     private RowMapper<User> userRowMapper() {
