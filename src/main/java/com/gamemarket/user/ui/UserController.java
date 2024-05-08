@@ -4,6 +4,7 @@ import com.gamemarket.common.exception.user.UserException;
 import com.gamemarket.common.exception.user.UserExceptionCode;
 import com.gamemarket.user.application.UserService;
 import com.gamemarket.user.domain.entity.User;
+import com.gamemarket.user.infra.UserRepository;
 import com.gamemarket.user.ui.request.UserSignInRequest;
 import com.gamemarket.user.ui.request.UserSignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,16 +22,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "sign-up")
     public void signUp(@RequestBody @Valid final UserSignUpRequest request) {
-        if (userService.validateDuplicateEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserException(UserExceptionCode.EXISTS_USER_EMAIL);
         }
 
-        if (userService.validateDuplicateNickname(request.getNickname())) {
+        if (userRepository.existsByNickname(request.getNickname())) {
             throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
         }
 

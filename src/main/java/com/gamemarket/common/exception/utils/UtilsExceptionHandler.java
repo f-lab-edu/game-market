@@ -1,7 +1,6 @@
-package com.gamemarket.common.exception.user;
+package com.gamemarket.common.exception.utils;
 
 import com.gamemarket.common.exception.ExceptionResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,16 +8,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-public class UserExceptionHandler {
+public class UtilsExceptionHandler {
 
-    @ExceptionHandler(UserException.class)
-    public ResponseEntity<ExceptionResponse> userExceptionHandler(final UserException ex, final HttpServletRequest request) {
+    @ExceptionHandler(UtilsException.class)
+    public ResponseEntity<ExceptionResponse> jsonExceptionHandler(final UtilsException ex) {
         final ExceptionResponse response = ExceptionResponse.builder()
                 .code(ex.getCode().getCode())
-                .message(ex.getCode().getMessage())
+                .message("server error")
                 .build();
 
-        log.warn("[UserException] URI: {}, CODE: {}", request.getRequestURI(), response.getCode());
+        log.error("[UtilsException] CODE: {}", response.getCode(), ex);
 
         return ResponseEntity
                 .status(ex.getCode().getStatus())

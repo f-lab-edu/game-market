@@ -30,16 +30,6 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public boolean validateDuplicateEmail(final String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean validateDuplicateNickname(final String nickname) {
-        return userRepository.existsByNickname(nickname);
-    }
-
-    @Transactional(readOnly = true)
     public User signIn(final UserSignInRequest request) {
         final User user = userRepository.findByEmail(request.getEmail());
 
