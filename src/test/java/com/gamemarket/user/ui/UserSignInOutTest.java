@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.gamemarket.user.fixture.UserFixture.emailPasswordConvertRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,13 +40,11 @@ public class UserSignInOutTest {
     @Test
     @DisplayName("로그인 성공 테스트")
     void signInSuccessTest() throws Exception {
-        String email = "abcd@naver.com";
-        String password = "qwer1234QW!";
-        String json = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
+        String request = emailPasswordConvertRequest("abcd@naver.com", "qwer1234QW!");
 
         mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(request))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -53,13 +52,11 @@ public class UserSignInOutTest {
     @Test
     @DisplayName("로그인 실패 테스트 - 비밀번호 틀림")
     void signInFailTest() throws Exception {
-        String email = "abcd@naver.com";
-        String password = "sdogQ12!!!";
-        String json = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
+        String request = emailPasswordConvertRequest("abcd@naver.com", "zxcv1234QW!");
 
         mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(request))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
@@ -76,13 +73,11 @@ public class UserSignInOutTest {
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String email = "abcd@naver.com";
-        String password = "qwer1234QW!";
-        String json = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
+        String request = emailPasswordConvertRequest("abcd@naver.com", "qwer1234QW!");
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(request))
                 .andExpect(status().isOk())
                 .andReturn();
 

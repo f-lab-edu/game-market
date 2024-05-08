@@ -16,4 +16,12 @@ public class UserFixture {
         return JsonUtils.objectToJson(userMap);
     }
 
+    public static String emailPasswordConvertRequest(String email, String password) {
+        return String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
+    }
+
+    public static String nicknamePasswordConvertRequest(String nickname, String password) {
+        return String.format("{\"nickname\":\"%s\",\"password\":\"%s\"}", nickname, password);
+    }
+
 }
