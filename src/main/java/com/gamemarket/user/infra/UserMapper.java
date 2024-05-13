@@ -1,6 +1,7 @@
 package com.gamemarket.user.infra;
 
 import com.gamemarket.user.domain.entity.User;
+import com.gamemarket.user.ui.request.UserSignInRequest;
 import com.gamemarket.user.ui.request.UserSignUpRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,8 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(source = "request.email", target = "email")
-    @Mapping(source = "request.nickname", target = "nickname")
     @Mapping(source = "encryptPassword", target = "password")
     @Mapping(target = "status", constant = "true")
     User user(final UserSignUpRequest request, final String encryptPassword);
@@ -19,8 +18,9 @@ public interface UserMapper {
     @Mapping(source = "requestPassword", target = "password")
     User updateUser(final Long userId, final String requestNickname, final String requestPassword);
 
-    @Mapping(source = "user.id", target = "id")
     @Mapping(target = "status", constant = "false")
     User deleteUser(final User user);
+
+    User signInUser(final UserSignInRequest request);
 
 }

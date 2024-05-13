@@ -43,7 +43,7 @@ public class UserRepository {
     }
 
     public void signOff(final User user) {
-        final int updateStatus = jdbcTemplate.update("UPDATE \"USER\" SET status = false WHERE id = ? and status = true", user.getId());
+        final int updateStatus = jdbcTemplate.update("UPDATE \"USER\" SET status = ? where id = ? and status = ?",user.getStatus() , user.getId(), !user.getStatus());
 
         if (updateStatus != UPDATE_SUCCESS) {
             throw new UserException(UserExceptionCode.USER_NOT_FOUNT);
@@ -65,9 +65,9 @@ public class UserRepository {
         return !users.isEmpty();
     }
 
-    public User findByEmail(final String email) {
+    public User findByEmail(final User user) {
         try {
-            return jdbcTemplate.queryForObject("select * from \"USER\" where email = ? and status = true", userRowMapper(), email);
+            return jdbcTemplate.queryForObject("select * from \"USER\" where email = ? and status = ?", userRowMapper(), user.getEmail(), user.getStatus());
         } catch (EmptyResultDataAccessException e) {
             throw new UserException(UserExceptionCode.INVALID_CREDENTIALS);
         }
