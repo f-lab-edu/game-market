@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +47,13 @@ public class ProductController {
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "상품조회")
-    public List<Product> findProducts(@ModelAttribute @Valid final ProductFindRequest request, final HttpSession session) {
+    public List<Product> findProducts(
+            @ModelAttribute @Valid final ProductFindRequest request,
+            @PageableDefault Pageable page,
+            final HttpSession session
+    ) {
         SessionUtil.getUserFromSession(session);
-        return productRepository.findProducts(request);
+        return productRepository.findProducts(request, page);
     }
 
 }

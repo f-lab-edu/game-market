@@ -6,6 +6,7 @@ import com.gamemarket.product.domain.ProductCategory;
 import com.gamemarket.product.domain.entity.Product;
 import com.gamemarket.product.ui.request.ProductFindRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -50,12 +51,12 @@ public class ProductRepository {
         }
     }
 
-    public List<Product> findProducts(final ProductFindRequest request) {
-        final String dynamicQuery = createDynamicQuery(request);
+    public List<Product> findProducts(final ProductFindRequest request, final Pageable page) {
+        final String dynamicQuery = createDynamicQuery(request, page);
         return jdbcTemplate.query(dynamicQuery, productRowMapper());
     }
 
-    private String createDynamicQuery(final ProductFindRequest request) {
+    private String createDynamicQuery(final ProductFindRequest request, final Pageable page) {
         StringBuilder query = new StringBuilder("select * from product where 1=1");
 
         if (request.getCategory() != null) {
@@ -78,11 +79,11 @@ public class ProductRepository {
             query.append(" and seller_nickname = '").append(request.getSellerNickname()).append("'");
         }
 
-        query.append(" order by ").append(" created_at ").append(request.getSort());
-
-        if (request.getLimit() != null && request.getOffset() != null) {
-            query.append(" limit ").append(request.getLimit()).append(" offset ").append(request.getOffset());
-        }
+        query.append(" order by ");
+        page.getSort().forEach(order -> {
+            query.append(order.getProperty()).append(" ").append(order.getDirection());
+        });
+        query.append(" limit ").append(page.getPageNumber()).append(", ").append(page.getPageSize());
 
         return query.toString();
     }
