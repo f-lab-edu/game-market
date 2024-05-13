@@ -10,12 +10,12 @@ import com.gamemarket.user.ui.request.UserSignInRequest;
 import com.gamemarket.user.ui.request.UserSignOffRequest;
 import com.gamemarket.user.ui.request.UserSignUpRequest;
 import com.gamemarket.user.ui.request.UserUpdateRequest;
+import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,10 +34,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "회원가입")
     public void signUp(@RequestBody @Valid final UserSignUpRequest request) {
-       existsByEmail(request.getEmail());
-       existsByNickname(request.getNickname());
+        existsByEmail(request.getEmail());
+        existsByNickname(request.getNickname());
 
-       userService.signUp(request);
+        userService.signUp(request);
     }
 
     @PatchMapping("/sign-off")
@@ -69,11 +69,11 @@ public class UserController {
     public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, final HttpSession session) {
         final User user = SessionUtil.getUserFromSession(session);
 
-        if (!StringUtils.isEmpty(request.getNickname())) {
-            existsByNickname(request.getNickname());
+        if (request.isNicknameUpdate()) {
+            existsByUpdateNickname(user.getId(), request.getNickname());
         }
 
-        userService.profileUpdate(user, request);
+        userService.updateProfile(user, request);
     }
 
     private void existsByEmail(final String email) {
@@ -84,6 +84,12 @@ public class UserController {
 
     private void existsByNickname(final String nickname) {
         if (userRepository.existsByNickname(nickname)) {
+            throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
+        }
+    }
+
+    private void existsByUpdateNickname(final Long id, final String nickname) {
+        if (userRepository.existsByUpdateNickname(id, nickname)) {
             throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
         }
     }

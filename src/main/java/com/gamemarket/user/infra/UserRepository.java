@@ -33,7 +33,7 @@ public class UserRepository {
         parameters.put("email", user.getEmail());
         parameters.put("nickname", user.getNickname());
         parameters.put("password", user.getPassword());
-        parameters.put("status", user.isStatus());
+        parameters.put("status", user.getStatus());
         parameters.put("created_at", LocalDateTime.now());
         parameters.put("updated_at", LocalDateTime.now());
 
@@ -55,6 +55,11 @@ public class UserRepository {
         return !users.isEmpty();
     }
 
+    public boolean existsByUpdateNickname(Long id, String nickname) {
+        final List<User> users = jdbcTemplate.query("select * from \"USER\" where nickname = ? and id != ?", userRowMapper(), nickname, id);
+        return !users.isEmpty();
+    }
+
     public User findByEmail(final String email) {
         try {
             return jdbcTemplate.queryForObject("select * from \"USER\" where email = ? and status = true", userRowMapper(), email);
@@ -63,9 +68,9 @@ public class UserRepository {
         }
     }
 
-    public void profileUpdate(final UserUpdateDto dto) {
-        jdbcTemplate.update("UPDATE \"USER\" SET nickname = COALESCE(?, nickname), password = COALESCE(?, password) WHERE id = ?",
-                dto.getNickname(), dto.getPassword(), dto.getId());
+    public void profileUpdate(final User user) {
+        jdbcTemplate.update("UPDATE \"USER\" SET nickname = ?, password = ? WHERE id = ?",
+                user.getNickname(), user.getPassword(), user.getId());
     }
 
     private RowMapper<User> userRowMapper() {

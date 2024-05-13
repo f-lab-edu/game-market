@@ -1,5 +1,6 @@
 package com.gamemarket.user.ui.request;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -18,5 +19,13 @@ public class UserUpdateRequest {
 
     @Pattern(regexp = USER_PASSWORD_REGEXP, message = "비밀번호는 10~16자 영문 대 소문자, 숫자, 특수문자 형식이어야 합니다.")
     private String password;
+
+    public boolean isNicknameUpdate() {
+        return !StringUtils.isEmpty(nickname);
+    }
+
+    public boolean isPasswordUpdate() {
+        return !StringUtils.isEmpty(password);
+    }
 
 }
