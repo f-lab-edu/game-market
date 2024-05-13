@@ -18,10 +18,7 @@ public class ProductExceptionHandler {
                 .message(ex.getCode().getMessage())
                 .build();
 
-        switch (ex.getCode()) {
-            case USER_PRODUCT_NOT_FOUND -> log.warn("[ProductException] URI: {}, CODE: {}", request.getRequestURI(), response.getCode());
-            case CATEGORY_NOT_MATCH -> log.error("[ProductException] CODE: {}", response.getCode(), ex);
-        }
+        log.warn("[ProductException] URI: {}, CODE: {}", request.getRequestURI(), response.getCode());
 
         return ResponseEntity
                 .status(ex.getCode().getStatus())

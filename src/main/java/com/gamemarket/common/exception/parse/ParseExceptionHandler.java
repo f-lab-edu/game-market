@@ -1,4 +1,4 @@
-package com.gamemarket.common.exception.utils;
+package com.gamemarket.common.exception.parse;
 
 import com.gamemarket.common.exception.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-public class UtilsExceptionHandler {
+public class ParseExceptionHandler {
 
-    @ExceptionHandler(UtilsException.class)
-    public ResponseEntity<ExceptionResponse> jsonExceptionHandler(final UtilsException ex) {
+    @ExceptionHandler(ParseException.class)
+    public ResponseEntity<ExceptionResponse> jsonExceptionHandler(final ParseException ex) {
         final ExceptionResponse response = ExceptionResponse.builder()
                 .code(ex.getCode().getCode())
                 .message("server error")
