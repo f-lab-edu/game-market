@@ -15,6 +15,6 @@ public interface ProductMapper {
     @Mapping(source = "request.price", target = "price")
     @Mapping(source = "request.category", target = "category")
     @Mapping(target = "status", constant = "true")
-    Product create(final User user, final ProductCreateRequest request);
+    Product product(final User user, final ProductCreateRequest request);
 
 }

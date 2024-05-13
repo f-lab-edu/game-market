@@ -23,6 +23,8 @@ public class UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private static final int UPDATE_SUCCESS = 1;
+
     public void save(final User user) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("\"USER\"")
@@ -41,8 +43,11 @@ public class UserRepository {
     }
 
     public void signOff(final User user) {
-        jdbcTemplate.update("UPDATE \"USER\" SET status = false WHERE id = ?",
-                user.getId());
+        final int updateStatus = jdbcTemplate.update("UPDATE \"USER\" SET status = false WHERE id = ? and status = true", user.getId());
+
+        if (updateStatus != UPDATE_SUCCESS) {
+            throw new UserException(UserExceptionCode.USER_NOT_FOUNT);
+        }
     }
 
     public Boolean existsByNickname(final String nickname) {

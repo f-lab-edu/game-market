@@ -41,11 +41,14 @@ public class UserController {
     }
 
     @PatchMapping("/sign-off")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "회원탈퇴")
     public void signOff(@RequestBody @Valid final UserSignOffRequest request, final HttpSession session) {
         final User user = SessionUtil.getUserFromSession(session);
+
         userService.signOff(user, request);
+        System.out.println("123123123123123123123");
+        session.removeAttribute(SESSION_USER_KEY);
     }
 
     @PostMapping("/sign-in")

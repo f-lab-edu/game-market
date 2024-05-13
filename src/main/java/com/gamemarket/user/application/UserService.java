@@ -25,7 +25,7 @@ public class UserService {
     @Transactional
     public void signUp(final UserSignUpRequest request) {
         final String encryptPassword = passwordEncoder.encode(request.getPassword());
-        final User user = userMapper.signUp(request, encryptPassword);
+        final User user = userMapper.user(request, encryptPassword);
 
         userRepository.save(user);
     }
@@ -33,7 +33,9 @@ public class UserService {
     @Transactional
     public void signOff(final User user, final UserSignOffRequest request) {
         verifyPassword(request.getPassword(), user);
-        userRepository.signOff(user);
+        final User deleteUser = userMapper.deleteUser(user);
+
+        userRepository.signOff(deleteUser);
     }
 
     @Transactional(readOnly = true)
@@ -54,7 +56,7 @@ public class UserService {
     public void updateProfile(final User user, final UserUpdateRequest request) {
         final String nickname = getUpdateNickname(user, request);
         final String password = getUpdatePassword(user, request);
-        final User userUpdate = userMapper.updateProfile(user.getId(), nickname, password);
+        final User userUpdate = userMapper.updateUser(user.getId(), nickname, password);
 
         userRepository.profileUpdate(userUpdate);
     }

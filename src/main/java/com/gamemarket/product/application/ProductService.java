@@ -16,7 +16,7 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public void createProduct(final User user, final ProductCreateRequest request) {
-        final Product product = productMapper.create(user, request);
+        final Product product = productMapper.product(user, request);
         productRepository.save(product);
     }
 
