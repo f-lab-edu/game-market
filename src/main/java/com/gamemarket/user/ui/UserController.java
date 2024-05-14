@@ -1,5 +1,6 @@
 package com.gamemarket.user.ui;
 
+import com.gamemarket.user.domain.CurrentUser;
 import com.gamemarket.common.exception.user.UserException;
 import com.gamemarket.common.exception.user.UserExceptionCode;
 import com.gamemarket.user.application.UserService;
@@ -43,7 +44,7 @@ public class UserController {
     @Operation(summary = "회원탈퇴")
     public void signOff(
             @RequestBody @Valid final UserSignOffRequest request,
-            @RequestAttribute("user") final User user,
+            @CurrentUser User user,
             final HttpSession session
     ) {
         userService.signOff(user, request);
@@ -68,7 +69,7 @@ public class UserController {
     @PatchMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "회원정보변경")
-    public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, @RequestAttribute("user") final User user) {
+    public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, @CurrentUser User user) {
         if (request.isNicknameUpdate()) {
             existsByUpdateNickname(user.getId(), request.getNickname());
         }
