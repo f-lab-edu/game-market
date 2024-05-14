@@ -1,5 +1,7 @@
-package com.gamemarket.user.ui;
+package com.gamemarket.product.ui;
 
+import com.gamemarket.product.domain.ProductCategory;
+import com.gamemarket.product.fixture.ProductFixture;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +17,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.gamemarket.user.fixture.UserFixture.emailPasswordConvertRequest;
-import static com.gamemarket.user.fixture.UserFixture.nicknamePasswordConvertRequest;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class UserUpdateTest {
+public class ProductTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,16 +42,16 @@ public class UserUpdateTest {
     }
 
     @Test
-    @DisplayName("회원정보변경 성공 테스트")
-    void profileUpdateSuccessTest() throws Exception {
+    @DisplayName("상품등록 테스트")
+    void createProductTest() throws Exception {
         MockHttpSession session = getMockHttpSession();
-        String request = nicknamePasswordConvertRequest("qwerqwer", "qwer1234QW!");
+        String request = ProductFixture.productCreateRequest("aa", ProductCategory.ACTION, 100);
 
-        mockMvc.perform(patch("/user/update")
+        mockMvc.perform(post("/product/")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(print());
     }
 

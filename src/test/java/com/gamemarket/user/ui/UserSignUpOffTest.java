@@ -1,6 +1,7 @@
 package com.gamemarket.user.ui;
 
 import com.gamemarket.common.exception.user.UserExceptionCode;
+import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,8 @@ class UserSignUpOffTest {
     }
 
     void signUpSuccessTest() throws Exception {
-        String request = UserFixture.createUserRequest("abcd@naver.com", "abcd", "qwer1234QW!");
+        User user = UserFixture.createUser("qwer@naver.com", "qwer", "qwer1234QW!", true);
+        String request = UserFixture.ObjectToJson(user);
 
         mockMvc.perform(post("/user/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,7 +50,8 @@ class UserSignUpOffTest {
     }
 
     void existsEmailTest() throws Exception {
-        String request = UserFixture.createUserRequest("abcd@naver.com", "abcdabcd", "qwer1234QW!");
+        User user = UserFixture.createUser("qwer@naver.com", "qwerqwer", "qwer1234QW!", true);
+        String request = UserFixture.ObjectToJson(user);
 
         mockMvc.perform(post("/user/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +63,8 @@ class UserSignUpOffTest {
     }
 
     void existsNicknameTest() throws Exception {
-        String request = UserFixture.createUserRequest("abcdabcd@naver.com", "abcd", "qwer1234QW!");
+        User user = UserFixture.createUser("qwerqwer@naver.com", "qwer", "qwer1234QW!", true);
+        String request = UserFixture.ObjectToJson(user);
 
         mockMvc.perform(post("/user/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -79,12 +83,12 @@ class UserSignUpOffTest {
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String request = emailPasswordConvertRequest("abcd@naver.com", "qwer1234QW!");
+        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)

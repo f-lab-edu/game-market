@@ -1,23 +1,26 @@
 package com.gamemarket.user.fixture;
 
 import com.gamemarket.common.utils.JsonUtils;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.gamemarket.user.domain.entity.User;
 
 public class UserFixture {
 
-    public static String createUserRequest(String email, String nickname, String password) {
-        Map<String, String> userMap = new HashMap<>();
-        userMap.put("email", email);
-        userMap.put("nickname", nickname);
-        userMap.put("password", password);
+    public static User createUser(String email, String nickname, String password, boolean status) {
+        User user = new User();
+        user.setEmail(email);
+        user.setNickname(nickname);
+        user.setPassword(password);
+        user.setStatus(status);
 
-        return JsonUtils.objectToJson(userMap);
+        return user;
     }
 
-    public static String emailPasswordConvertRequest(String email, String password) {
-        return String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
+    public static String ObjectToJson(User user) {
+        return JsonUtils.objectToJson(user);
+    }
+
+    public static String emailPasswordConvertRequest(String email, String password, boolean status) {
+        return String.format("{\"email\":\"%s\",\"password\":\"%s\",\"status\":%b}", email, password, status);
     }
 
     public static String nicknamePasswordConvertRequest(String nickname, String password) {

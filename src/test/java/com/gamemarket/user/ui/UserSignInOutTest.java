@@ -1,5 +1,6 @@
 package com.gamemarket.user.ui;
 
+import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,8 @@ public class UserSignInOutTest {
 
     @BeforeEach
     void signUp() throws Exception {
-        String request = UserFixture.createUserRequest("abcd@naver.com", "abcd", "qwer1234QW!");
+        User user = UserFixture.createUser("qwer@naver.com", "qwer", "qwer1234QW!", true);
+        String request = UserFixture.ObjectToJson(user);
 
         mockMvc.perform(post("/user/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -40,7 +42,7 @@ public class UserSignInOutTest {
     @Test
     @DisplayName("로그인 성공 테스트")
     void signInSuccessTest() throws Exception {
-        String request = emailPasswordConvertRequest("abcd@naver.com", "qwer1234QW!");
+        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
 
         mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -52,7 +54,7 @@ public class UserSignInOutTest {
     @Test
     @DisplayName("로그인 실패 테스트 - 비밀번호 틀림")
     void signInFailTest() throws Exception {
-        String request = emailPasswordConvertRequest("abcd@naver.com", "zxcv1234QW!");
+        String request = emailPasswordConvertRequest("qwer@naver.com", "zxcv1234QW!", true);
 
         mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +75,7 @@ public class UserSignInOutTest {
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String request = emailPasswordConvertRequest("abcd@naver.com", "qwer1234QW!");
+        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
