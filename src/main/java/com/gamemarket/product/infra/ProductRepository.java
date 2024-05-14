@@ -2,6 +2,8 @@ package com.gamemarket.product.infra;
 
 import com.gamemarket.common.exception.parse.ParseException;
 import com.gamemarket.common.exception.parse.ParseExceptionCode;
+import com.gamemarket.common.exception.product.ProductException;
+import com.gamemarket.common.exception.product.ProductExceptionCode;
 import com.gamemarket.product.domain.ProductCategory;
 import com.gamemarket.product.domain.entity.Product;
 import com.gamemarket.product.ui.request.ProductFindRequest;
@@ -47,7 +49,7 @@ public class ProductRepository {
         int deleteProductCount = jdbcTemplate.update("delete from product where id = ? and seller_id = ?", productId, userId);
 
         if (deleteProductCount == 0) {
-            throw new ParseException(ParseExceptionCode.ENUM_PARSER_EXCEPTION);
+            throw new ProductException(ProductExceptionCode.USER_PRODUCT_NOT_FOUND);
         }
     }
 

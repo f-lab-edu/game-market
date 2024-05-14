@@ -1,6 +1,5 @@
 package com.gamemarket.product.ui;
 
-import com.gamemarket.common.utils.SessionUtil;
 import com.gamemarket.product.application.ProductService;
 import com.gamemarket.product.domain.entity.Product;
 import com.gamemarket.product.infra.ProductRepository;
@@ -9,7 +8,6 @@ import com.gamemarket.product.ui.request.ProductFindRequest;
 import com.gamemarket.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,28 +29,21 @@ public class ProductController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "상품등록")
-    public void createProduct(@RequestBody @Valid final ProductCreateRequest request, final HttpSession session) {
-        final User user = SessionUtil.getUserFromSession(session);
+    public void createProduct(@RequestBody @Valid final ProductCreateRequest request, @RequestAttribute("user") final User user) {
         productService.createProduct(user, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "상품삭제")
-    public void deleteProduct(@PathVariable final Long id, final HttpSession session) {
-        final User user = SessionUtil.getUserFromSession(session);
+    public void deleteProduct(@PathVariable final Long id, @RequestAttribute("user") final User user) {
         productRepository.deleteProduct(user.getId(), id);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "상품조회")
-    public List<Product> findProducts(
-            @ModelAttribute @Valid final ProductFindRequest request,
-            @PageableDefault Pageable page,
-            final HttpSession session
-    ) {
-        SessionUtil.getUserFromSession(session);
+    public List<Product> findProducts(@ModelAttribute @Valid final ProductFindRequest request, @PageableDefault Pageable page) {
         return productRepository.findProducts(request, page);
     }
 

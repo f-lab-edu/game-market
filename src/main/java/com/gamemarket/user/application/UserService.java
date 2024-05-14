@@ -40,11 +40,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User signIn(final UserSignInRequest request) {
-        final User deleteUser = userMapper.signInUser(request);
-        final User user = userRepository.findByEmail(deleteUser);
-        verifyPassword(request.getPassword(), user);
+        final User user = userMapper.signInUser(request);
+        final User signInUser = userRepository.findByEmail(user);
+        verifyPassword(request.getPassword(), signInUser);
 
-        return user;
+        return signInUser;
     }
 
     private void verifyPassword(final String requestPassword, final User user) {

@@ -2,7 +2,6 @@ package com.gamemarket.user.ui;
 
 import com.gamemarket.common.exception.user.UserException;
 import com.gamemarket.common.exception.user.UserExceptionCode;
-import com.gamemarket.common.utils.SessionUtil;
 import com.gamemarket.user.application.UserService;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.infra.UserRepository;
@@ -10,7 +9,6 @@ import com.gamemarket.user.ui.request.UserSignInRequest;
 import com.gamemarket.user.ui.request.UserSignOffRequest;
 import com.gamemarket.user.ui.request.UserSignUpRequest;
 import com.gamemarket.user.ui.request.UserUpdateRequest;
-import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -43,11 +41,12 @@ public class UserController {
     @PatchMapping("/sign-off")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "회원탈퇴")
-    public void signOff(@RequestBody @Valid final UserSignOffRequest request, final HttpSession session) {
-        final User user = SessionUtil.getUserFromSession(session);
-
+    public void signOff(
+            @RequestBody @Valid final UserSignOffRequest request,
+            @RequestAttribute("user") final User user,
+            final HttpSession session
+    ) {
         userService.signOff(user, request);
-        System.out.println("123123123123123123123");
         session.removeAttribute(SESSION_USER_KEY);
     }
 
@@ -69,9 +68,7 @@ public class UserController {
     @PatchMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "회원정보변경")
-    public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, final HttpSession session) {
-        final User user = SessionUtil.getUserFromSession(session);
-
+    public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, @RequestAttribute("user") final User user) {
         if (request.isNicknameUpdate()) {
             existsByUpdateNickname(user.getId(), request.getNickname());
         }
