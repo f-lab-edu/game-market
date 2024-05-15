@@ -26,7 +26,7 @@ public class ProductFixture {
         return product;
     }
 
-    public static String productCreateRequest(String name, ProductCategory category, Integer price) {
+    public static String productRequest(String name, ProductCategory category, Integer price) {
         return String.format("{\"name\":\"%s\",\"category\":\"%s\",\"price\":%d}", name, category, price);
     }
 

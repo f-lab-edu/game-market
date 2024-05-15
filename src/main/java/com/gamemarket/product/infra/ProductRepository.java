@@ -1,7 +1,5 @@
 package com.gamemarket.product.infra;
 
-import com.gamemarket.common.exception.parse.ParseException;
-import com.gamemarket.common.exception.parse.ParseExceptionCode;
 import com.gamemarket.common.exception.product.ProductException;
 import com.gamemarket.common.exception.product.ProductExceptionCode;
 import com.gamemarket.product.domain.ProductCategory;
@@ -58,6 +56,15 @@ public class ProductRepository {
         return jdbcTemplate.query(dynamicQuery, productRowMapper());
     }
 
+    public List<Product> findById(final Long productId, final Long sellerId) {
+        return jdbcTemplate.query("select * from product where id = ? and seller_id = ?", productRowMapper(), productId, sellerId);
+    }
+
+    public void updateProduct(final Long productId, final Long sellerId, final Product product) {
+        jdbcTemplate.update("update product set name = ?, price = ?,category = ? where id = ? and seller_id = ?",
+                product.getName(), product.getPrice(), product.getCategory().name(), productId, sellerId);
+    }
+
     private String createDynamicQuery(final ProductFindRequest request, final Pageable page) {
         StringBuilder query = new StringBuilder("select * from product where 1=1");
 
@@ -104,4 +111,5 @@ public class ProductRepository {
             return product;
         };
     }
+
 }
