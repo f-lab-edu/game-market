@@ -32,7 +32,14 @@ Game Title을 사고 팔수 있는 중고거래 서비스
 | 상품 조회 | GET    | /product      |
 | 상품 수정 | PATCH  | /product/{id} |
 | 상품 예약 | ---    | ---           |
-| 좋아요   | ---    | ---           |
+
+### 좋아요
+
+| 기능          | METHOD | URL                  |
+|-------------|--------|----------------------|
+| 상품 좋아요 등록   | POST   | /like/product/{id}   |
+| 상품 좋아요 삭제   | DELETE | /like/product/{id}   |
+| 상품 좋아요 조회   | GET    | /like/product/       |
 
 ### 회원
 
