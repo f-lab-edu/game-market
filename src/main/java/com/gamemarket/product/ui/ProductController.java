@@ -1,7 +1,5 @@
 package com.gamemarket.product.ui;
 
-import com.gamemarket.common.exception.product.ProductException;
-import com.gamemarket.common.exception.product.ProductExceptionCode;
 import com.gamemarket.product.ui.request.ProductUpdateRequest;
 import com.gamemarket.user.domain.CurrentUser;
 import com.gamemarket.product.application.ProductService;

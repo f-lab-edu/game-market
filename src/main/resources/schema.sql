@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS product_like;
 
 CREATE TABLE `user`
 (
@@ -30,3 +31,11 @@ CREATE INDEX idx_name ON product(name);
 CREATE INDEX idx_category ON product(category);
 CREATE INDEX idx_status ON product(status);
 CREATE INDEX idx_create_at ON product(created_at);
+
+CREATE TABLE product_like
+(
+    product_id      BIGINT       NOT NULL,
+    user_id         BIGINT       NOT NULL,
+    seller_id       BIGINT       NOT NULL,
+    PRIMARY KEY (product_id, user_id, seller_id)
+);

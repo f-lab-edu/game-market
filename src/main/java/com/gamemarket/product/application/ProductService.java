@@ -25,18 +25,11 @@ public class ProductService {
     }
 
     public void updateProduct(final Long productId, final Long sellerId, final ProductUpdateRequest request) {
-        final Product product = productRepository.findById(productId, sellerId).stream()
-                .findFirst()
-                .orElseThrow(() -> new ProductException(ProductExceptionCode.USER_PRODUCT_NOT_FOUND));
-
-        System.out.println("product = " + product);
-
+        final Product product = productRepository.findProduct(productId, sellerId);
         final String name = getUpdateName(product, request);
         final ProductCategory category = getUpdateCategory(product, request);
         final Integer price = getUpdatePrice(product, request);
         final Product updateProduct = productMapper.updateProduct(name, price, category);
-
-        System.out.println("updateProduct = " + updateProduct);
 
         productRepository.updateProduct(product.getId(), product.getSellerId(), updateProduct);
     }

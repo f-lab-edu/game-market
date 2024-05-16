@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 public enum ProductExceptionCode {
 
     USER_PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, 3000, "해당 유저의 상품이 존재하지 않습니다."),
-    CATEGORY_NOT_MATCH(HttpStatus.INTERNAL_SERVER_ERROR, 3001, "ENUM match error");
+    CATEGORY_NOT_MATCH(HttpStatus.INTERNAL_SERVER_ERROR, 3001, "ENUM match error"),
+    STATUS_NOT_MATCH(HttpStatus.INTERNAL_SERVER_ERROR, 3002, "ENUM match error");
 
     private final HttpStatus status;
     private final int code;

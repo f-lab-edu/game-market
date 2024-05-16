@@ -56,8 +56,18 @@ public class ProductRepository {
         return jdbcTemplate.query(dynamicQuery, productRowMapper());
     }
 
-    public List<Product> findById(final Long productId, final Long sellerId) {
-        return jdbcTemplate.query("select * from product where id = ? and seller_id = ?", productRowMapper(), productId, sellerId);
+    public Product findProduct(final Long productId, final Long sellerId) {
+        final List<Product> products = jdbcTemplate.query("select * from product where id = ? and seller_id = ?", productRowMapper(), productId, sellerId);
+        return products.stream()
+                .findFirst()
+                .orElseThrow(() -> new ProductException(ProductExceptionCode.USER_PRODUCT_NOT_FOUND));
+    }
+
+    public Product findById(final Long productId) {
+        final List<Product> products = jdbcTemplate.query("select * from product where id = ?", productRowMapper(), productId);
+        return products.stream()
+                .findFirst()
+                .orElseThrow(() -> new ProductException(ProductExceptionCode.USER_PRODUCT_NOT_FOUND));
     }
 
     public void updateProduct(final Long productId, final Long sellerId, final Product product) {
