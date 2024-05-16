@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.gamemarket.user.fixture.UserFixture.emailPasswordConvertRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,8 +43,14 @@ public class ProductLikeTest {
     }
 
     @Test
-    @DisplayName("상품 좋아요 테스트")
-    void createProductLikeTest() throws Exception {
+    @DisplayName("상품 좋아요 추가/조회/삭제 시나리오 테스트")
+    void productLikeTest() throws Exception {
+        createProductLikeTest();
+        findAllProductLikeTest();
+        deleteProductLikeTest();
+    }
+
+    private void createProductLikeTest() throws Exception {
         MockHttpSession session = getMockHttpSession();
         Product product = findProduct(session);
 
@@ -51,6 +58,28 @@ public class ProductLikeTest {
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
+                .andDo(print());
+    }
+
+    private void findAllProductLikeTest() throws Exception {
+        MockHttpSession session = getMockHttpSession();
+        Product product = findProduct(session);
+
+        mockMvc.perform(get("/like/product/{id}", product.getId())
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    private void deleteProductLikeTest() throws Exception {
+        MockHttpSession session = getMockHttpSession();
+        Product product = findProduct(session);
+
+        mockMvc.perform(delete("/like/product/{id}", product.getId())
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 

@@ -6,11 +6,13 @@ import com.gamemarket.like.domain.entity.ProductLike;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -19,7 +21,7 @@ public class ProductLikeRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public void save(final ProductLike productLike) {
+    public void createProductLike(final ProductLike productLike) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("product_like")
                 .usingColumns("product_id", "user_id", "seller_id");
@@ -34,6 +36,29 @@ public class ProductLikeRepository {
         } catch (DataIntegrityViolationException e) {
             throw new LikeException(LikeExceptionCode.DUPLICATE_PRODUCT_LIKE);
         }
+    }
+
+    public void deleteProductLike(final ProductLike productLike) {
+        int deleteProductLike = jdbcTemplate.update("delete from product_like where product_id = ? and user_id = ? and seller_id = ?", productLike.getProductId(), productLike.getUserId(), productLike.getSellerId());
+
+        if (deleteProductLike == 0) {
+            throw new LikeException(LikeExceptionCode.LIKE_NOT_FOUND);
+        }
+    }
+
+    public List<ProductLike> findAllProductLike(final Long productId) {
+        return jdbcTemplate.query("select * from product_like where product_id = ?", productLikeRowMapper(), productId);
+    }
+
+    private RowMapper<ProductLike> productLikeRowMapper() {
+        return (rs, rowNum) -> {
+            ProductLike productLike = new ProductLike();
+            productLike.setProductId(rs.getLong("product_id"));
+            productLike.setUserId(rs.getLong("user_id"));
+            productLike.setSellerId(rs.getLong("seller_id"));
+
+            return productLike;
+        };
     }
 
 }
