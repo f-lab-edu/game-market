@@ -11,6 +11,7 @@ import com.gamemarket.product.ui.request.ProductUpdateRequest;
 import com.gamemarket.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
     public void updateProduct(final Long productId, final Long sellerId, final ProductUpdateRequest request) {
         final Product product = productRepository.findProduct(productId, sellerId);
         final String name = getUpdateName(product, request);

@@ -36,7 +36,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "상품삭제")
     public void deleteProduct(@PathVariable final Long id, @CurrentUser User user) {
         productRepository.deleteProduct(user.getId(), id);

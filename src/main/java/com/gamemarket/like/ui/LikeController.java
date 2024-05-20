@@ -36,7 +36,7 @@ public class LikeController {
     }
 
     @DeleteMapping("/product/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "좋아요 삭제 - 상품")
     public void deleteProductLike(@PathVariable final Long id, @CurrentUser User user) {
         final Product product = productRepository.findById(id);
