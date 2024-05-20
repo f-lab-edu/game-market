@@ -2,6 +2,9 @@ package com.gamemarket.product.fixture;
 
 import com.gamemarket.product.domain.ProductCategory;
 import com.gamemarket.product.domain.entity.Product;
+import com.gamemarket.product.ui.request.ProductCreateRequest;
+import com.gamemarket.product.ui.request.ProductFindRequest;
+import com.gamemarket.product.ui.request.ProductUpdateRequest;
 
 public class ProductFixture {
 
@@ -24,6 +27,29 @@ public class ProductFixture {
         product.setStatus(status);
 
         return product;
+    }
+
+    public static ProductCreateRequest productCreateRequest(String name, ProductCategory category, Integer price) {
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest();
+        productCreateRequest.setName(name);
+        productCreateRequest.setCategory(category);
+        productCreateRequest.setPrice(price);
+
+        return productCreateRequest;
+    }
+
+    public static ProductFindRequest productFindRequest(String name) {
+        ProductFindRequest productFindRequest = new ProductFindRequest();
+        productFindRequest.setName(name);
+
+        return productFindRequest;
+    }
+
+    public static ProductUpdateRequest productUpdateRequest(String name) {
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
+        productUpdateRequest.setName(name);
+
+        return productUpdateRequest;
     }
 
     public static String productRequest(String name, ProductCategory category, Integer price) {

@@ -1,7 +1,10 @@
 package com.gamemarket.user.ui;
 
+import com.gamemarket.common.utils.JsonUtils;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
+import com.gamemarket.user.ui.request.UserSignInRequest;
+import com.gamemarket.user.ui.request.UserUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +48,8 @@ public class UserUpdateTest {
     @DisplayName("회원정보변경 성공 테스트")
     void profileUpdateSuccessTest() throws Exception {
         MockHttpSession session = getMockHttpSession();
-        String request = nicknamePasswordConvertRequest("qwerqwer", "qwer1234QW!");
+        UserUpdateRequest userUpdate = UserFixture.userUpdateRequest("qwerqwer", "qwer1234QW!");
+        String request = JsonUtils.objectToJson(userUpdate);
 
         mockMvc.perform(patch("/user/update")
                         .session(session)
@@ -56,7 +60,8 @@ public class UserUpdateTest {
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
+        UserSignInRequest userSignIn = UserFixture.userSignInRequest("qwer@naver.com", "qwer1234QW!", true);
+        String request = JsonUtils.objectToJson(userSignIn);
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)

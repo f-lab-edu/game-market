@@ -2,6 +2,8 @@ package com.gamemarket.user.fixture;
 
 import com.gamemarket.common.utils.JsonUtils;
 import com.gamemarket.user.domain.entity.User;
+import com.gamemarket.user.ui.request.UserSignInRequest;
+import com.gamemarket.user.ui.request.UserUpdateRequest;
 
 public class UserFixture {
 
@@ -13,6 +15,23 @@ public class UserFixture {
         user.setStatus(status);
 
         return user;
+    }
+
+    public static UserSignInRequest userSignInRequest(String email, String password, boolean status) {
+        UserSignInRequest userSignInRequest = new UserSignInRequest();
+        userSignInRequest.setEmail(email);
+        userSignInRequest.setPassword(password);
+        userSignInRequest.setStatus(status);
+
+        return userSignInRequest;
+    }
+
+    public static UserUpdateRequest userUpdateRequest(String nickname, String password) {
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+        userUpdateRequest.setNickname(nickname);
+        userUpdateRequest.setPassword(password);
+
+        return userUpdateRequest;
     }
 
     public static String ObjectToJson(User user) {

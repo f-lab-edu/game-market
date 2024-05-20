@@ -1,8 +1,10 @@
 package com.gamemarket.user.ui;
 
 import com.gamemarket.common.exception.user.UserExceptionCode;
+import com.gamemarket.common.utils.JsonUtils;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
+import com.gamemarket.user.ui.request.UserSignInRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +90,8 @@ class UserSignUpOffTest {
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
+        UserSignInRequest userSignIn = UserFixture.userSignInRequest("qwer@naver.com", "qwer1234QW!", true);
+        String request = JsonUtils.objectToJson(userSignIn);
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -1,11 +1,14 @@
 package com.gamemarket.like.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gamemarket.common.utils.JsonUtils;
 import com.gamemarket.product.domain.ProductCategory;
 import com.gamemarket.product.domain.entity.Product;
 import com.gamemarket.product.fixture.ProductFixture;
+import com.gamemarket.product.ui.request.ProductFindRequest;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
+import com.gamemarket.user.ui.request.UserSignInRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,7 +82,7 @@ public class ProductLikeTest {
         mockMvc.perform(delete("/like/product/{id}", product.getId())
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 
@@ -107,7 +110,8 @@ public class ProductLikeTest {
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
+        UserSignInRequest userSignIn = UserFixture.userSignInRequest("qwer@naver.com", "qwer1234QW!", true);
+        String request = JsonUtils.objectToJson(userSignIn);
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +123,8 @@ public class ProductLikeTest {
     }
 
     private Product findProduct(MockHttpSession session) throws Exception {
-        String request = String.format("{\"name\":\"%s\"}", "aa");
+        ProductFindRequest productFind = ProductFixture.productFindRequest("aa");
+        String request = JsonUtils.objectToJson(productFind);
 
         MvcResult response = mockMvc.perform(get("/product/")
                         .param("name", "aa")

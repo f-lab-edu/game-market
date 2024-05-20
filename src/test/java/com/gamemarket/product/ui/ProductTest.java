@@ -1,11 +1,16 @@
 package com.gamemarket.product.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gamemarket.common.utils.JsonUtils;
 import com.gamemarket.product.domain.ProductCategory;
 import com.gamemarket.product.domain.entity.Product;
 import com.gamemarket.product.fixture.ProductFixture;
+import com.gamemarket.product.ui.request.ProductCreateRequest;
+import com.gamemarket.product.ui.request.ProductFindRequest;
+import com.gamemarket.product.ui.request.ProductUpdateRequest;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
+import com.gamemarket.user.ui.request.UserSignInRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +57,8 @@ public class ProductTest {
     @DisplayName("상품등록 테스트")
     void createProductTest() throws Exception {
         MockHttpSession session = getMockHttpSession();
-        String request = ProductFixture.productRequest("aa", ProductCategory.ACTION, 100);
+        ProductCreateRequest productCreate = ProductFixture.productCreateRequest("aa", ProductCategory.ACTION, 100);
+        String request = JsonUtils.objectToJson(productCreate);
 
         mockMvc.perform(post("/product/")
                         .session(session)
@@ -72,7 +78,8 @@ public class ProductTest {
     }
 
     private Product findProduct(MockHttpSession session) throws Exception {
-        String request = String.format("{\"name\":\"%s\"}", "aa");
+        ProductFindRequest productFind = ProductFixture.productFindRequest("aa");
+        String request = JsonUtils.objectToJson(productFind);
 
         MvcResult response = mockMvc.perform(get("/product/")
                         .param("name", "aa")
@@ -89,7 +96,8 @@ public class ProductTest {
     }
 
     private void updateProduct(MockHttpSession session, Product product) throws Exception {
-        String request = String.format("{\"name\":\"%s\"}", "aa");
+        ProductUpdateRequest productUpdate = ProductFixture.productUpdateRequest("aa");
+        String request = JsonUtils.objectToJson(productUpdate);
 
         mockMvc.perform(patch("/product/{id}", product.getId())
                         .session(session)
@@ -100,7 +108,8 @@ public class ProductTest {
     }
 
     private MockHttpSession getMockHttpSession() throws Exception {
-        String request = emailPasswordConvertRequest("qwer@naver.com", "qwer1234QW!", true);
+        UserSignInRequest userSignIn = UserFixture.userSignInRequest("qwer@naver.com", "qwer1234QW!", true);
+        String request = JsonUtils.objectToJson(userSignIn);
 
         MvcResult result = mockMvc.perform(post("/user/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
