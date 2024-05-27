@@ -3,15 +3,15 @@ package com.gamemarket.user.ui.request;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import static com.gamemarket.user.utils.UserConst.USER_NICKNAME_REGEXP;
 import static com.gamemarket.user.utils.UserConst.USER_PASSWORD_REGEXP;
 
 @Getter
-@Setter
+@AllArgsConstructor
 @ToString
 public class UserUpdateRequest {
 

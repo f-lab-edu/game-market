@@ -18,20 +18,11 @@ public class UserFixture {
     }
 
     public static UserSignInRequest userSignInRequest(String email, String password, boolean status) {
-        UserSignInRequest userSignInRequest = new UserSignInRequest();
-        userSignInRequest.setEmail(email);
-        userSignInRequest.setPassword(password);
-        userSignInRequest.setStatus(status);
-
-        return userSignInRequest;
+        return new UserSignInRequest(email, password, status);
     }
 
     public static UserUpdateRequest userUpdateRequest(String nickname, String password) {
-        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
-        userUpdateRequest.setNickname(nickname);
-        userUpdateRequest.setPassword(password);
-
-        return userUpdateRequest;
+        return new UserUpdateRequest(nickname, password);
     }
 
     public static String ObjectToJson(User user) {

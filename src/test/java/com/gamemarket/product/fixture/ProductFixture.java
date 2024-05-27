@@ -30,12 +30,7 @@ public class ProductFixture {
     }
 
     public static ProductCreateRequest productCreateRequest(String name, ProductCategory category, Integer price) {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest();
-        productCreateRequest.setName(name);
-        productCreateRequest.setCategory(category);
-        productCreateRequest.setPrice(price);
-
-        return productCreateRequest;
+        return new ProductCreateRequest(name, category, price);
     }
 
     public static ProductFindRequest productFindRequest(String name) {
@@ -46,10 +41,7 @@ public class ProductFixture {
     }
 
     public static ProductUpdateRequest productUpdateRequest(String name) {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
-        productUpdateRequest.setName(name);
-
-        return productUpdateRequest;
+        return new ProductUpdateRequest(name, null, null);
     }
 
     public static String productRequest(String name, ProductCategory category, Integer price) {
