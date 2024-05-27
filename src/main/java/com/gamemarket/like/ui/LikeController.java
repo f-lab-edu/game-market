@@ -32,6 +32,7 @@ public class LikeController {
         final Product product = productRepository.findById(id);
         final ProductLike productLike = productLikeMapper.productLike(product, user);
 
+        productLikeRepository.findProductLike(productLike);
         productLikeRepository.createProductLike(productLike);
     }
 

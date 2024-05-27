@@ -31,15 +31,21 @@ public class ProductLikeRepository {
         parameters.put("userId", productLike.getUserId());
         parameters.put("sellerId", productLike.getSellerId());
 
-        try {
-            jdbcInsert.execute(new MapSqlParameterSource(parameters));
-        } catch (DataIntegrityViolationException e) {
+        jdbcInsert.execute(new MapSqlParameterSource(parameters));
+    }
+
+    public void findProductLike(final ProductLike productLike) {
+        Integer count = jdbcTemplate.queryForObject("select count(*) from product_like where product_id = ? and user_id = ? and seller_id = ?",
+                Integer.class, productLike.getProductId(), productLike.getUserId(), productLike.getSellerId());
+
+        if ((count != null) && (count > 0)) {
             throw new LikeException(LikeExceptionCode.DUPLICATE_PRODUCT_LIKE);
         }
     }
 
     public void deleteProductLike(final ProductLike productLike) {
-        int deleteProductLike = jdbcTemplate.update("delete from product_like where product_id = ? and user_id = ? and seller_id = ?", productLike.getProductId(), productLike.getUserId(), productLike.getSellerId());
+        int deleteProductLike = jdbcTemplate.update("delete from product_like where product_id = ? and user_id = ? and seller_id = ?",
+                productLike.getProductId(), productLike.getUserId(), productLike.getSellerId());
 
         if (deleteProductLike == 0) {
             throw new LikeException(LikeExceptionCode.LIKE_NOT_FOUND);
