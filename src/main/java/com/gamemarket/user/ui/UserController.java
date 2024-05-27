@@ -33,9 +33,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "회원가입")
     public void signUp(@RequestBody @Valid final UserSignUpRequest request) {
-        existsByEmail(request.getEmail());
-        existsByNickname(request.getNickname());
-
+        userRepository.existsByEmail(request.getEmail());
+        userRepository.existsByNickname(request.getNickname());
         userService.signUp(request);
     }
 
@@ -70,29 +69,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "회원정보변경")
     public void profileUpdate(@RequestBody @Valid final UserUpdateRequest request, @CurrentUser User user) {
-        if (request.isNicknameUpdate()) {
-            existsByUpdateNickname(user.getId(), request.getNickname());
-        }
-
+        userRepository.existsByUpdateNickname(user.getId(), request.getNickname());
         userService.updateProfile(user, request);
-    }
-
-    private void existsByEmail(final String email) {
-        if (userRepository.existsByEmail(email)) {
-            throw new UserException(UserExceptionCode.EXISTS_USER_EMAIL);
-        }
-    }
-
-    private void existsByNickname(final String nickname) {
-        if (userRepository.existsByNickname(nickname)) {
-            throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
-        }
-    }
-
-    private void existsByUpdateNickname(final Long id, final String nickname) {
-        if (userRepository.existsByUpdateNickname(id, nickname)) {
-            throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
-        }
     }
 
 }
