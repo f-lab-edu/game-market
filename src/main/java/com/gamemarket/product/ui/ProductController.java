@@ -1,5 +1,6 @@
 package com.gamemarket.product.ui;
 
+import com.gamemarket.product.ui.request.ProductUpdateRequest;
 import com.gamemarket.user.domain.CurrentUser;
 import com.gamemarket.product.application.ProductService;
 import com.gamemarket.product.domain.entity.Product;
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "상품삭제")
     public void deleteProduct(@PathVariable final Long id, @CurrentUser User user) {
         productRepository.deleteProduct(user.getId(), id);
@@ -46,6 +47,17 @@ public class ProductController {
     @Operation(summary = "상품조회")
     public List<Product> findProducts(@ModelAttribute @Valid final ProductFindRequest request, @PageableDefault Pageable page) {
         return productRepository.findProducts(request, page);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "상품수정")
+    public void updateProduct(
+            @PathVariable final Long id,
+            @RequestBody @Valid final ProductUpdateRequest request,
+            @CurrentUser User user
+    ) {
+        productService.updateProduct(id, user.getId(), request);
     }
 
 }

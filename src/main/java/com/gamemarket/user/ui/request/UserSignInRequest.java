@@ -2,10 +2,13 @@ package com.gamemarket.user.ui.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@AllArgsConstructor
 @ToString
 public class UserSignInRequest {
 

@@ -50,19 +50,27 @@ public class UserRepository {
         }
     }
 
-    public Boolean existsByNickname(final String nickname) {
+    public void existsByNickname(final String nickname) {
         final List<User> users = jdbcTemplate.query("select * from \"USER\" where nickname = ?", userRowMapper(), nickname);
-        return !users.isEmpty();
+
+        if (!users.isEmpty()) {
+            throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
+        }
     }
 
-    public Boolean existsByEmail(final String email) {
+    public void existsByEmail(final String email) {
         final List<User> users = jdbcTemplate.query("select * from \"USER\" where email = ?", userRowMapper(), email);
-        return !users.isEmpty();
+        if (!users.isEmpty()) {
+            throw new UserException(UserExceptionCode.EXISTS_USER_EMAIL);
+        }
     }
 
-    public boolean existsByUpdateNickname(Long id, String nickname) {
+    public void existsByUpdateNickname(Long id, String nickname) {
         final List<User> users = jdbcTemplate.query("select * from \"USER\" where nickname = ? and id != ?", userRowMapper(), nickname, id);
-        return !users.isEmpty();
+
+        if (!users.isEmpty()) {
+            throw new UserException(UserExceptionCode.EXISTS_USER_NICKNAME);
+        }
     }
 
     public User findByEmail(final User user) {

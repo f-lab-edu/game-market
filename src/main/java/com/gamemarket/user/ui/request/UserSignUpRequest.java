@@ -3,12 +3,14 @@ package com.gamemarket.user.ui.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 import static com.gamemarket.user.utils.UserConst.*;
 
 @Getter
+@AllArgsConstructor
 @ToString
 public class UserSignUpRequest {
 

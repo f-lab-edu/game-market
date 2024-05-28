@@ -1,13 +1,11 @@
-package com.gamemarket.product.ui;
+package com.gamemarket.like.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gamemarket.common.utils.JsonUtils;
 import com.gamemarket.product.domain.ProductCategory;
 import com.gamemarket.product.domain.entity.Product;
 import com.gamemarket.product.fixture.ProductFixture;
-import com.gamemarket.product.ui.request.ProductCreateRequest;
 import com.gamemarket.product.ui.request.ProductFindRequest;
-import com.gamemarket.product.ui.request.ProductUpdateRequest;
 import com.gamemarket.user.domain.entity.User;
 import com.gamemarket.user.fixture.UserFixture;
 import com.gamemarket.user.ui.request.UserSignInRequest;
@@ -26,14 +24,14 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.gamemarket.user.fixture.UserFixture.emailPasswordConvertRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ProductTest {
+public class ProductLikeTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,7 +40,53 @@ public class ProductTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void signUp() throws Exception {
+    void setup() throws Exception {
+        signUp();
+        createProduct();
+    }
+
+    @Test
+    @DisplayName("상품 좋아요 추가/조회/삭제 시나리오 테스트")
+    void productLikeTest() throws Exception {
+        createProductLikeTest();
+        findAllProductLikeTest();
+        deleteProductLikeTest();
+    }
+
+    private void createProductLikeTest() throws Exception {
+        MockHttpSession session = getMockHttpSession();
+        Product product = findProduct(session);
+
+        mockMvc.perform(post("/like/product/{id}", product.getId())
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print());
+    }
+
+    private void findAllProductLikeTest() throws Exception {
+        MockHttpSession session = getMockHttpSession();
+        Product product = findProduct(session);
+
+        mockMvc.perform(get("/like/product/{id}", product.getId())
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    private void deleteProductLikeTest() throws Exception {
+        MockHttpSession session = getMockHttpSession();
+        Product product = findProduct(session);
+
+        mockMvc.perform(delete("/like/product/{id}", product.getId())
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    private void signUp() throws Exception {
         User user = UserFixture.createUser("qwer@naver.com", "qwer", "qwer1234QW!", true);
         String request = UserFixture.ObjectToJson(user);
 
@@ -53,12 +97,9 @@ public class ProductTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("상품등록 테스트")
-    void createProductTest() throws Exception {
+    private void createProduct() throws Exception {
         MockHttpSession session = getMockHttpSession();
-        ProductCreateRequest productCreate = ProductFixture.productCreateRequest("aa", ProductCategory.ACTION, 100);
-        String request = JsonUtils.objectToJson(productCreate);
+        String request = ProductFixture.productRequest("aa", ProductCategory.ACTION, 100);
 
         mockMvc.perform(post("/product/")
                         .session(session)
@@ -68,13 +109,17 @@ public class ProductTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("상품조회/변경 테스트")
-    void findUpdateTest() throws Exception {
-        MockHttpSession session = getMockHttpSession();
-        createProductTest();
-        Product product = findProduct(session);
-        updateProduct(session, product);
+    private MockHttpSession getMockHttpSession() throws Exception {
+        UserSignInRequest userSignIn = UserFixture.userSignInRequest("qwer@naver.com", "qwer1234QW!", true);
+        String request = JsonUtils.objectToJson(userSignIn);
+
+        MvcResult result = mockMvc.perform(post("/user/sign-in")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return (MockHttpSession) result.getRequest().getSession(false);
     }
 
     private Product findProduct(MockHttpSession session) throws Exception {
@@ -93,31 +138,6 @@ public class ProductTest {
 
         Product[] products = objectMapper.readValue(response.getResponse().getContentAsString(), Product[].class);
         return products[0];
-    }
-
-    private void updateProduct(MockHttpSession session, Product product) throws Exception {
-        ProductUpdateRequest productUpdate = ProductFixture.productUpdateRequest("aa");
-        String request = JsonUtils.objectToJson(productUpdate);
-
-        mockMvc.perform(patch("/product/{id}", product.getId())
-                        .session(session)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    private MockHttpSession getMockHttpSession() throws Exception {
-        UserSignInRequest userSignIn = UserFixture.userSignInRequest("qwer@naver.com", "qwer1234QW!", true);
-        String request = JsonUtils.objectToJson(userSignIn);
-
-        MvcResult result = mockMvc.perform(post("/user/sign-in")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        return (MockHttpSession) result.getRequest().getSession(false);
     }
 
 }

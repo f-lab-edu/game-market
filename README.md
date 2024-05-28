@@ -23,28 +23,36 @@ Game Title을 사고 팔수 있는 중고거래 서비스
 
 # 📜 API
 
-### 회원
-
-| 기능   | url        |
-|-------|------------|
-| 회원 가입 | /user/sign-up  |
-| 회원 탈퇴 | /user  |
-| 로그인   | /user/log-in   |
-| 로그아웃   | /user/log-out   |
-
 ### 상품
 
-| 기능   | url        |
-|-------|------------|
-| 상품 조회 | /product  |
-| 상품 등록 | /product  |
-| 상품 삭제 | /product  |
-| 상품 수정 | /product  |
-| 상품 예약 | /product  |
-| 좋아요   | /product  |
+| 기능    | METHOD | URL           |
+|-------|--------|---------------|
+| 상품 등록 | POST   | /product/     |
+| 상품 삭제 | DELETE | /product/{id} |
+| 상품 조회 | GET    | /product      |
+| 상품 수정 | PATCH  | /product/{id} |
+| 상품 예약 | ---    | ---           |
+
+### 좋아요
+
+| 기능          | METHOD | URL                  |
+|-------------|--------|----------------------|
+| 상품 좋아요 등록   | POST   | /like/product/{id}   |
+| 상품 좋아요 삭제   | DELETE | /like/product/{id}   |
+| 상품 좋아요 조회   | GET    | /like/product/       |
+
+### 회원
+
+| 기능    | METHOD | URL            |
+|-------|--------|----------------|
+| 회원 가입 | POST   | /user/sign-up  |
+| 회원 탈퇴 | PATCH  | /user/sign-off |
+| 로그인   | POST   | /user/sign-in  |
+| 로그아웃  | POST   | /user/sing-out |
+| 회원 수정 | PATCH  | /user/update   |
 
 ### 채팅
 
-| 기능   | url        |
-|-------|------------|
-| 1:1 채팅 | /chat    |
+| 기능    | METHOD | URL  |
+|-------|------------|------|
+| 1:1 채팅 | /chat    | ---  |
